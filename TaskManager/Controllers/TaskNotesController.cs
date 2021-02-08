@@ -27,9 +27,14 @@ namespace TaskManager.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(TaskNote taskNote)
         {
-            _db.TaskNotes.Add(taskNote);
-            _db.SaveChanges();
-            return RedirectToAction("Index");
+            if(ModelState.IsValid)
+            {
+                _db.TaskNotes.Add(taskNote);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(taskNote);
+            
         }
     }
 }
