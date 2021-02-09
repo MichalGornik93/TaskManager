@@ -27,7 +27,7 @@ namespace TaskManager.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(TaskNote taskNote)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _db.TaskNotes.Add(taskNote);
                 _db.SaveChanges();
@@ -38,12 +38,12 @@ namespace TaskManager.Controllers
         //GET-EDIT
         public IActionResult Edit(int? id)
         {
-            if (id == null || id==0)
+            if (id == null || id == 0)
             {
                 return NotFound();
             }
             var note = _db.TaskNotes.Find(id);
-            if(note==null)
+            if (note == null)
             {
                 return NotFound();
             }
@@ -61,6 +61,38 @@ namespace TaskManager.Controllers
                 return RedirectToAction("Index");
             }
             return View(taskNote);
+        }
+
+        //GET-DELETE
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var taskNote = _db.TaskNotes.Find(id);
+            
+            if (taskNote == null)
+            {
+                return NotFound();
+            }
+            return View(taskNote);
+        }
+        //POST-DELETE
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeletePost(int? id)
+        {
+            var taskNote = _db.TaskNotes.Find(id);
+            if (taskNote == null)
+            {
+                return NotFound();
+            }
+
+            _db.TaskNotes.Remove(taskNote);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+
         }
     }
 }
