@@ -34,7 +34,33 @@ namespace TaskManager.Controllers
                 return RedirectToAction("Index");
             }
             return View(taskNote);
-            
+        }
+        //GET-EDIT
+        public IActionResult Edit(int? id)
+        {
+            if (id == null || id==0)
+            {
+                return NotFound();
+            }
+            var note = _db.TaskNotes.Find(id);
+            if(note==null)
+            {
+                return NotFound();
+            }
+            return View(note);
+        }
+        //POST-EDIT
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(TaskNote taskNote)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.TaskNotes.Update(taskNote);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(taskNote);
         }
     }
 }
